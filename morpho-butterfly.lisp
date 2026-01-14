@@ -83,9 +83,8 @@
                               (sin (* 2.0d0 s))
                               3.0d0)
                            (/ 1.0d0 5.0d0))
-                        (exp-exp exp0))))) ; loop
-    sum1) ; let
-  )
+                        (exp-exp exp0)))))
+    sum1))
 
 (declaim (ftype (function (fixnum double-float double-float double-float) double-float) A))
 (declaim (inline A))
@@ -130,51 +129,45 @@
                                       (+ y (/ x 4.0d0) (- 0.25d0))))))
                        (abs (- x (/ y 4.0d0)))))))))))))
 
-                                        ; end of with-compilation-unit
-
-
 (declaim (ftype (function (double-float double-float) double-float) E))
 (declaim (inline E))
 (defun E (x y)
   "Return E(x,y)."
   (declare (type double-float x y))
-  (let* ((exp1a
-           (- (* 100.0d0 (expt (+ (* 3 y) (* 0.75d0 x) 0.27d0) 4))))
-         (exp1b
-           (- (* 100.0d0 (expt
-                          (abs
-                           (* 7
-                              (+ 1.0d0
-                                 (/ 1.0d0
-                                    (+ (sqrt
-                                        (the (double-float 0.0d0)
-                                             (abs
-                                              (+ (* 100 y)
-                                                 (* 25 x)
-                                                 (- 6)))))
-                                       0.3d0)))
-                              (- x (/ y 4.0d0))))
-                          (+ (* 3 y) (* 0.75d0 x) 2.27d0)))))
-         (exp1 (+ exp1a exp1b 10.0d0))
-         (exp2 (+ (* 200
-                     (abs
-                      (+ y
-                         (/ x 4.0d0)
-                         (- 0.2d0)
-                         (* 3 (- x (/ y 4.0d0)) (- x (/ y 4.0d0))))))
-                  -32.0d0))
-         (exp3 (+ (* 500
-                     (abs
-                      (+ y
-                         (/ x 4.0d0)
-                         (- (/ 1.0d0 20.0d0))
-                         (- (* 0.7d0 (sqrt (abs (- x (/ y 4.0d0)))))))))
-                  -2.5d0)))
-    (declare (type double-float exp1a exp1b exp2 exp3))
-    (- 1.0d0
-       (* (exp-exp exp1)
-          (- 1.0d0
-             (exp-exp+exp exp2 exp3))))))
+  (- 1.0d0
+     (* (exp-exp
+         (+ (- (* 100.0d0 (expt (+ (* 3 y) (* 0.75d0 x) 0.27d0) 4)))
+            (- (* 100.0d0 (expt
+                           (abs
+                            (* 7
+                               (+ 1.0d0
+                                  (/ 1.0d0
+                                     (+ (sqrt
+                                         (the (double-float 0.0d0)
+                                              (abs
+                                               (+ (* 100 y)
+                                                  (* 25 x)
+                                                  (- 6)))))
+                                        0.3d0)))
+                               (- x (/ y 4.0d0))))
+                           (+ (* 3 y) (* 0.75d0 x) 2.27d0))))
+            10.0d0))
+        (- 1.0d0
+           (exp-exp+exp
+            (+ (* 200
+                  (abs
+                   (+ y
+                      (/ x 4.0d0)
+                      (- 0.2d0)
+                      (* 3 (- x (/ y 4.0d0)) (- x (/ y 4.0d0))))))
+               -32.0d0)
+            (+ (* 500
+                  (abs
+                   (+ y
+                      (/ x 4.0d0)
+                      (- (/ 1.0d0 20.0d0))
+                      (- (* 0.7d0 (sqrt (abs (- x (/ y 4.0d0)))))))))
+               -2.5d0))))))
 
 (declaim (ftype (function (double-float double-float) double-float) L))
 (declaim (inline L))
@@ -197,7 +190,7 @@
                                            1.0d0))))
                             (abs (- (/ x 2.0d0) (/ y 8.0d0)))
                             (* 4.0d0 (sin (* 5.0d0 s)))))
-                    6))) ; loop
+                    6)))
     sum1))
 
 (declaim (ftype (function (double-float double-float double-float) double-float) W))
@@ -206,36 +199,38 @@
   "Return W(x,y)."
   (declare (type double-float x y Cxy))
   
-  (let* ((omega1 (+ (- (* 40 Cxy))
-                    (/ 196.0d0 5.0d0)
-                    (* (/ 4.0d0 5.0d0)
-                       (sqrt (the (double-float 0.0d0)
-                                  (+ (* (- x (/ y 4.0d0))
-                                        (- x (/ y 4.0d0)))
-                                     (* (+ y (/ x 4.0d0))
-                                        (+ y (/ x 4.0d0)))))))))
-         (omega2 (- (* 40
-                       (+ (* 5 (abs
-                                (+ y
-                                   (/ x 4.0d0)
-                                   (- (/ 3 50.0d0))
-                                   (* (/ 1.0d0 3.0d0)
-                                      (- x (/ y 4.0d0))
-                                      (- x (/ y 4.0d0))))))
-                          (expt (abs (- (* 2 x) (/ y 2.0d0))) 3)
-                          (- (/ 2.0d0 5.0d0))))))
-         (omega3 (+
-                  (- (* 1000
-                        (+ (abs (- x (/ y 4.0d0))))))
-                  100.0d0
-                  (- (* 90.0d0 (atan (+ (* 8 y)
-                                        (* 2 x)
-                                        (/ 8 5.0d0)))))))
-         (omega4 (* 1000 (+ (abs (- x (/ y 4.0d0)))
-                            (- (/ 7 50.0d0))
-                            (* (/ 9.0d0 20.0d0)
-                               (+ y (/ x 4.0d0) 0.2d0)))))
-         (omega5 (* 70 (+ (abs
+  (+ (* (- (exp-exp+exp
+            (+ (- (* 40 Cxy))
+               (/ 196.0d0 5.0d0)
+               (* (/ 4.0d0 5.0d0)
+                  (sqrt (the (double-float 0.0d0)
+                             (+ (* (- x (/ y 4.0d0))
+                                   (- x (/ y 4.0d0)))
+                                (* (+ y (/ x 4.0d0))
+                                   (+ y (/ x 4.0d0))))))))
+            (- (* 40
+                  (+ (* 5 (abs
+                           (+ y
+                              (/ x 4.0d0)
+                              (- (/ 3 50.0d0))
+                              (* (/ 1.0d0 3.0d0)
+                                 (- x (/ y 4.0d0))
+                                 (- x (/ y 4.0d0))))))
+                     (expt (abs (- (* 2 x) (/ y 2.0d0))) 3)
+                     (- (/ 2.0d0 5.0d0)))))))
+        (- 1 (exp-exp+exp
+              (+
+               (- (* 1000
+                     (+ (abs (- x (/ y 4.0d0))))))
+               100.0d0
+               (- (* 90.0d0 (atan (+ (* 8 y)
+                                     (* 2 x)
+                                     (/ 8 5.0d0))))))
+              (* 1000 (+ (abs (- x (/ y 4.0d0)))
+                         (- (/ 7 50.0d0))
+                         (* (/ 9.0d0 20.0d0)
+                            (+ y (/ x 4.0d0) 0.2d0)))))))
+     (- (exp-exp (* 70 (+ (abs
                            (+
                             (* 5
                                (abs
@@ -247,8 +242,8 @@
                                       (- x (/ y 4.0d0))))))
                             (expt (abs (- (* 2 x) (/ y 2.0d0))) 3)
                             (- (/ 2 5.0d0))))
-                          (- (/ 1.0d0 200.0d0)))))
-         (omega6 (+ (* 700
+                          (- (/ 1.0d0 200.0d0))))))
+     (- (exp-exp (+ (* 700
                        (abs
                         (+
                          (abs (- x (/ y 4.0d0)))
@@ -258,14 +253,7 @@
                                                (/ x 4.0d0)
                                                (/ 1 5.0d0))))))))
                     (- (/ 21 20.0d0)))))
-
-    (declare (type double-float omega1 omega2 omega3 omega4 omega5 omega6))
-    
-    (+ (* (- (exp-exp+exp omega1 omega2))
-          (- 1 (exp-exp+exp omega3 omega4)))
-       (- (exp-exp omega5))
-       (- (exp-exp omega6))
-       1.0d0)))
+     1.0d0))
 
 (declaim (ftype (function (fixnum double-float double-float) double-float) H))
 (declaim (inline H))
@@ -279,36 +267,8 @@
          (A0xy (A 0 x y Cxy))
          (Lxy (L x y))
          (Kxy (K v x y))
-         (Wxy (W x y Cxy))
-         (exp2a (exp
-                 (+ (* 2 y)
-                    (* 0.5d0 x)
-                    (/ 2.0d0 5.0d0)
-                    (- (* 2.0d0 (abs (- x (/ y 4.0d0))))))))
-         (exp2b (exp
-                 (+ (* 8 y)
-                    (* 2 x)
-                    (/ 2.0d0 5.0d0)
-                    (- (abs (- (* 8 x) (* 2 y)))))))
-         (exp2 (+ exp2a exp2b))
-         (exp3 (- (* 50.0d0
-                     (- (* (expt (cos (+ (* 2 y) 
-                                         (* x 0.5d0)
-                                         (/ 7 5.0d0)
-                                         (- (abs (- (* 2 x)
-                                                    (* y 0.5d0))))))
-                                 80)
-                           (expt (sin (+ (* 20 y)
-                                         (* 5 x)
-                                         (abs (- (* 20 x) (* 5 y)))))
-                                 2))
-                        (expt (+ (* 2.7d0 y)
-                                 (* (* 27 x) (/ 1.0d0 40.0d0))
-                                 (/ 81.0d0 250.0d0)
-                                 )
-                              10)
-                        (/ 49.0d0 50.0d0))))))
-    (declare (type double-float Cxy Exy Lxy Wxy Kxy A0xy exp2a exp2b exp2 exp3))
+         (Wxy (W x y Cxy)))
+    (declare (type double-float Cxy Exy Lxy Wxy Kxy A0xy))
 
     (+
      ;; first term:
@@ -322,12 +282,36 @@
            (A 1 x y Cxy)
            (- 1 Exy)
            (* (+ 50.0d0 Lxy) (/ 1.0d0 50.0d0))
-           (exp-exp exp2)
+           (exp-exp+exp
+            (+ (* 2 y)
+               (* 0.5d0 x)
+               (/ 2.0d0 5.0d0)
+               (- (* 2.0d0 (abs (- x (/ y 4.0d0))))))
+            (+ (* 8 y)
+               (* 2 x)
+               (/ 2.0d0 5.0d0)
+               (- (abs (- (* 8 x) (* 2 y))))))
            Wxy))
      ;; third term:
-     (exp-exp exp3)
+     (exp-exp (- (* 50.0d0
+                    (- (* (expt (cos (+ (* 2 y) 
+                                        (* x 0.5d0)
+                                        (/ 7 5.0d0)
+                                        (- (abs (- (* 2 x)
+                                                   (* y 0.5d0))))))
+                                80)
+                          (expt (sin (+ (* 20 y)
+                                        (* 5 x)
+                                        (abs (- (* 20 x) (* 5 y)))))
+                                2))
+                       (expt (+ (* 2.7d0 y)
+                                (* (* 27 x) (/ 1.0d0 40.0d0))
+                                (/ 81.0d0 250.0d0)
+                                )
+                             10)
+                       (/ 49.0d0 50.0d0)))))
      ;; fourth term:
-     (* 0.1d0 Exy (* (- v 1.0d0) (- v 1))))))
+     (* 0.1d0 Exy (* (- v 1.0d0) (- v 1.0d0))))))
 
 (declaim (ftype (function (double-float) fixnum) F))
 (declaim (inline F))
@@ -434,7 +418,7 @@
         (durations '()))
     (dotimes (i nb-runs)
       (format t "~%~%Run ~D / ~D:~%" (1+ i) nb-runs)
-      (let ((duration (run)))
+      (let ((duration (run1)))
         (format t "Run ~D / ~D: ~F seconds~%" (1+ i) nb-runs duration)
         (push duration durations)))
     (setq durations (sort durations #'<))
@@ -500,7 +484,7 @@ Algorithm to convert value to HSL then RGB is inspired by: https://stackoverflow
         (loop for m of-type fixnum from 1 to width do
           (let* ((z (aref value-array (- n 1) (- m 1)))
                  (w (/ (- z value-min) value-range)) ; between 0 and 1
-                 (h (/ (* w 1.2d0) 3.60d0)) ; hie between 0° and 120°/360°
+                 (h (* (* w 1.2d0) (/ 1.0d0 3.60d0))) ; hie between 0° and 120°/360°
                  (s 1.0d0)                  ; saturation
                  (l 0.5d0)                  ; lightness
                  (q (- (+ l s) (* l s)))
@@ -521,8 +505,7 @@ Algorithm to convert value to HSL then RGB is inspired by: https://stackoverflow
   "Main function. Create butterfly.png"
 
   (format t "~%1) Create arrays...~%")
-  (let* ((export-file "butterfly2.png")
-         (r-array (make-array `(,+height+ ,+width+) :element-type 'fixnum :initial-element 0))
+  (let* ((r-array (make-array `(,+height+ ,+width+) :element-type 'fixnum :initial-element 0))
          (g-array (make-array `(,+height+ ,+width+) :element-type 'fixnum :initial-element 0))
          (b-array (make-array `(,+height+ ,+width+) :element-type 'fixnum :initial-element 0))
          (C-array (make-array `(,+height+ ,+width+) :element-type 'double-float :initial-element 0.0d0))
@@ -880,16 +863,14 @@ Algorithm to convert value to HSL then RGB is inspired by: https://stackoverflow
                                    A1xy
                                    (- 1 Exy)
                                    (* (+ 50.0d0 Lxy) (/ 1.0d0 50.0d0))
-                                   (exp-exp (+ (exp
-                                                (+ (* 2 y)
+                                   (exp-exp+exp (+ (* 2 y)
                                                    (* 0.5d0 x)
                                                    (/ 2.0d0 5.0d0)
-                                                   (- (* 2.0d0 (abs (- x (/ y 4.0d0)))))))
-                                               (exp
+                                                   (- (* 2.0d0 (abs (- x (/ y 4.0d0))))))
                                                 (+ (* 8 y)
                                                    (* 2 x)
                                                    (/ 2.0d0 5.0d0)
-                                                   (- (abs (- (* 8 x) (* 2 y))))))))
+                                                   (- (abs (- (* 8 x) (* 2 y))))))
                                    Wxy))
                              ;; third term:
                              (exp-exp (- (* 50.0d0
@@ -924,16 +905,14 @@ Algorithm to convert value to HSL then RGB is inspired by: https://stackoverflow
                                    A1xy
                                    (- 1 Exy)
                                    (* (+ 50.0d0 Lxy) (/ 1.0d0 50.0d0))
-                                   (exp-exp (+ (exp
-                                                (+ (* 2 y)
+                                   (exp-exp+exp (+ (* 2 y)
                                                    (* 0.5d0 x)
                                                    (/ 2.0d0 5.0d0)
-                                                   (- (* 2.0d0 (abs (- x (/ y 4.0d0)))))))
-                                               (exp
+                                                   (- (* 2.0d0 (abs (- x (/ y 4.0d0))))))
                                                 (+ (* 8 y)
                                                    (* 2 x)
                                                    (/ 2.0d0 5.0d0)
-                                                   (- (abs (- (* 8 x) (* 2 y))))))))
+                                                   (- (abs (- (* 8 x) (* 2 y))))))
                                    Wxy))
                              ;; third term:
                              (exp-exp (- (* 50.0d0
@@ -969,16 +948,14 @@ Algorithm to convert value to HSL then RGB is inspired by: https://stackoverflow
                                    A1xy
                                    (- 1 Exy)
                                    (* (+ 50.0d0 Lxy) (/ 1.0d0 50.0d0))
-                                   (exp-exp (+ (exp
-                                                (+ (* 2 y)
+                                   (exp-exp+exp (+ (* 2 y)
                                                    (* 0.5d0 x)
                                                    (/ 2.0d0 5.0d0)
-                                                   (- (* 2.0d0 (abs (- x (/ y 4.0d0)))))))
-                                               (exp
+                                                   (- (* 2.0d0 (abs (- x (/ y 4.0d0))))))
                                                 (+ (* 8 y)
                                                    (* 2 x)
                                                    (/ 2.0d0 5.0d0)
-                                                   (- (abs (- (* 8 x) (* 2 y))))))))
+                                                   (- (abs (- (* 8 x) (* 2 y))))))
                                    Wxy))
                              ;; third term:
                              (exp-exp (- (* 50.0d0
@@ -1014,24 +991,6 @@ Algorithm to convert value to HSL then RGB is inspired by: https://stackoverflow
                              (expt (abs H2xy) (exp-exp (* 1000.0 (- H2xy 1.0)))))))) ; end of let bindings
                  (declare (type double-float x y Cxy Exy Lxy Wxy K0xy K1xy K2xy A0xy A1xy H0xy H1xy H2xy)
                           (type fixnum m v r g b))
-
-                 ;; (when (and (= n 1) (= m 1))
-                 ;;   (locally
-                 ;;       (declare (sb-ext:muffle-conditions sb-ext:compiler-note))
-                 ;;     (format t "L0,0 = ~A~%" Lxy)))
-
-                 ;; (when (and (= n 500) (= m 1))
-                 ;;   (locally
-                 ;;       (declare (sb-ext:muffle-conditions sb-ext:compiler-note))
-                 ;;     (format t "L500,0 = ~A~%" Lxy)))
-
-                 ;; (when (and (= n 580) (= m 1354))
-                 ;;   (locally
-                 ;;       (declare (sb-ext:muffle-conditions sb-ext:compiler-note))
-                 ;;     (format t "~%~%n = ~A, m = ~A~%" n m)
-                 ;;     (format t "   Cxy = ~a~%" Cxy)
-                 ;;     (format t "   Exy = ~a~%" Exy)
-                 ;;     (format t "   Lxy = ~a~%" Lxy)))
 
                  (setf (aref C-array (- n 1) (- m 1)) Cxy)
                  (setf (aref E-array (- n 1) (- m 1)) Exy)
@@ -1089,7 +1048,7 @@ Algorithm to convert value to HSL then RGB is inspired by: https://stackoverflow
 
 (defun main ()
   (format t "~%(1) GENERATE BUTTERFLY~%")
-  (format t "----------------------~%~%")
+  (format t "----------------------~%")
   (run1)
   (format t "~%(2) GENERATE HEATMAPS~%")
   (format t "---------------------~%~%")
