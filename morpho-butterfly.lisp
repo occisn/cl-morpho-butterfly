@@ -484,9 +484,9 @@ Algorithm to convert value to HSL then RGB is inspired by: https://stackoverflow
                  (l 0.5d0)                  ; lightness
                  (q (- (+ l s) (* l s)))
                  (p (- (* 2 l) q))
-                 (r (floor (* 255 (hue-to-rgb p q (+ h (/ 1.0d0 3.0d0))))))
-                 (g (floor (* 255 (hue-to-rgb p q h))))
-                 (b (floor (* 255 (hue-to-rgb p q (- h (/ 1.0d0 3.0d0)))))))
+                 (r (truncate (* 255 (hue-to-rgb p q (+ h (/ 1.0d0 3.0d0))))))
+                 (g (truncate (* 255 (hue-to-rgb p q h))))
+                 (b (truncate (* 255 (hue-to-rgb p q (- h (/ 1.0d0 3.0d0)))))))
             (declare (type double-float z w h s l p q)
                      (type fixnum r g b))
             (setf (aref r-array (- n 1) (- m 1)) r)
