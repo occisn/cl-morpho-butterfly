@@ -474,11 +474,6 @@ Algorithm to convert value to HSL then RGB is inspired by: https://stackoverflow
             (when (< z value-min) (setq value-min z)))))
       (setq value-range (- value-max value-min))
 
-      (when (string= "L-heatmap.png" export-file)
-        (locally
-            (declare (sb-ext:muffle-conditions sb-ext:compiler-note))
-          (format t "~%~%L min: ~a~%L max: ~a~%~%" value-min value-max)))
-
       ;; (2) calculate RGB arrays
       (loop for n of-type fixnum from 1 to height do
         (loop for m of-type fixnum from 1 to width do
