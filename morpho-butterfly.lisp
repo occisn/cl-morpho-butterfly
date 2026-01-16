@@ -13,7 +13,7 @@
   "width of the picture, in pixels")
 (defconstant +height+ 1100
   "height of the picture, in pixels")
-(defconstant +nb-cores+ 8
+(defconstant +nb-cores+ 18
   "Number of cores")
 (declaim (type fixnum +width+ +height+ +nb-cores+))
 
